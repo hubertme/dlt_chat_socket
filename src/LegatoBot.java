@@ -58,6 +58,11 @@ public class LegatoBot {
         } else if (command.equals(STATUS_LEGATO)) {
             this.announceToUsers(this.isEnabled ? "Legato is enabled" : "Legato is disabled");
         } else if (command.matches(ADD_TASK)) {
+            if (!this.isEnabled) {
+                this.announceToUsers(String.format("Please run '%s' to enable legato", ENABLE_LEGATO));
+                return;
+            }
+
             final String[] breakdown = command.split(" at ");
             final String taskName = breakdown[0].split("legato add ")[1];
             final String taskTime = breakdown[1];
@@ -66,6 +71,11 @@ public class LegatoBot {
             tasksList.add(newTask);
             this.announceToUsers("Success added task to task list!");
         } else if (command.equals(QUERY_TASKS)) {
+            if (!this.isEnabled) {
+                this.announceToUsers(String.format("Please run '%s' to enable legato", ENABLE_LEGATO));
+                return;
+            }
+
             String outputString = "";
 
             int i = 1;
@@ -85,6 +95,8 @@ public class LegatoBot {
                     "4. Add task -> 'legato add <task_name> at <HH:mm>' "+
                     "5. List all tasks -> 'legato tasks' ";
             this.announceToUsers(helpText);
+        } else if (command.startsWith("legato ")) {
+            this.announceToUsers(String.format("Invalid legato command, try tun '%s' for help", HELP_LEGATO));
         }
     }
 
